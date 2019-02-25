@@ -17,6 +17,8 @@ func main() {
 	app := cli.NewApp()
 	app.Author = "Konstantin Kruglov"
 	app.Email = "kruglovk@gmail.comm"
+	app.Version = "0.0.1"
+	app.HideHelp = true
 	app.Commands = []cli.Command{
 		{
 			Name:    "server",
