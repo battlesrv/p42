@@ -1,0 +1,11 @@
+version: "3"
+services:
+  aerospike:
+    image: aerospike
+    ports:
+      - 3000:3000
+      - 3001:3001
+      - 3002:3002
+    volumes:
+      - ./configs/aerospike_compose.conf:/opt/aerospike/aerospike_compose.conf
+    command: asd --config-file /opt/aerospike/aerospike_compose.conf
