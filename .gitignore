@@ -10,3 +10,7 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+p42
+p42.linux.amd64.tar.gz
+p42.darwin.amd64.tar.gz
