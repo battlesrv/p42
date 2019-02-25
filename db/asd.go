@@ -27,7 +27,7 @@ func NewConn(host string, port int) {
 	var err error
 	ASClient, err = as.NewClient(host, port)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 }
 
