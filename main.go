@@ -1,28 +1,55 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/battlesrv/p42/db"
 	"github.com/battlesrv/p42/routers"
-)
 
-var (
-	port   = flag.Int("port", 5000, "bind to port")
-	dbhost = flag.String("dbhost", "127.0.0.1", "address of DB tokens")
-	dbport = flag.Int("dbport", 3000, "port of DB tokens")
+	"github.com/urfave/cli"
 )
 
 func main() {
-	server := routers.Init()
-	server.Run(fmt.Sprintf(":%d", *port))
+	log.SetFlags(log.Ldate | log.Lmicroseconds | log.Lshortfile)
+
+	app := cli.NewApp()
+	app.Author = "Konstantin Kruglov"
+	app.Email = "kruglovk@gmail.comm"
+	app.Commands = []cli.Command{
+		{
+			Name:    "server",
+			Aliases: []string{"s"},
+			Action:  server,
+			Flags: []cli.Flag{
+				cli.UintFlag{
+					Name:  "port",
+					Usage: "bind to port",
+					Value: 5000,
+				},
+				cli.StringFlag{
+					Name:  "dbaddr",
+					Usage: "address of DB tokens",
+					Value: "127.0.0.1",
+				},
+				cli.IntFlag{
+					Name:  "dbport",
+					Usage: "port of DB tokens",
+					Value: 3000,
+				},
+			},
+		},
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatalln(err)
+	}
 }
 
-func init() {
-	log.SetFlags(log.Ldate | log.Lmicroseconds | log.Lshortfile)
-	flag.Parse()
+func server(c *cli.Context) {
+	db.NewConn(c.String("dbaddr"), c.Int("dbport"))
 
-	db.NewConn(*dbhost, *dbport)
+	srv := routers.Init()
+	srv.Run(fmt.Sprintf(":%d", c.Uint("port")))
 }
